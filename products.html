@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMOUR ÉLIXE — LES ÉLIXES</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+
+    /* ── Header floats over page-hero (matches homepage) ── */
+    header {
+      background: var(--night);
+      border-bottom: none;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 52px;
+    }
+    header .logo { color: var(--cream); }
+    header nav a { color: rgba(240,232,220,0.55); }
+    header nav a:hover, header nav a.active { color: var(--cream); }
+    header .auth-btn { border-color: rgba(240,232,220,0.28); color: rgba(240,232,220,0.65); }
+    header .auth-btn:hover { border-color: var(--gold); color: var(--gold); }
+    header .auth-btn.signed-in { border-color: var(--gold); color: var(--gold); }
+
+    /* ── PAGE HERO — mirrors homepage hero style ── */
+    .page-hero {
+      min-height: 52vh;
+      background: radial-gradient(ellipse at 75% 60%, rgba(123,34,66,0.18) 0%, transparent 65%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 64px;
+      padding-top: 68px; /* header height */
+    }
+
+    .page-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 52px;
+      max-width: 860px;
+    }
+
+    .page-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(240,232,220,0.45);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .page-eyebrow::before {
+      content: ''; display: block;
+      width: 32px; height: 1px;
+      background: rgba(240,232,220,0.3);
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(52px, 8vw, 100px);
+      line-height: 0.99;
+      color: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: -0.025em;
+      margin-bottom: 28px;
+    }
+    .page-title em {
+      font-style: italic;
+      color: rgba(185, 61, 61, 0.4);
+    }
+
+    .page-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: rgba(240,232,220,0.42);
+      line-height: 1.85;
+      max-width: 480px;
+      text-transform: uppercase;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 22px 52px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+      background: var(--deep); flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 90;
+    }
+    .filter-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(240,232,220,0.3); margin-right: 8px;
+    }
+    .filter-chip {
+      padding: 7px 20px; border: 1px solid var(--border);
+      background: none; font-family: 'DM Mono', monospace;
+      font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(240,232,220,0.45);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .filter-chip:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-chip.active {
+      background: var(--wine); border-color: var(--wine);
+      color: var(--cream);
+    }
+
+    /* ── PRODUCTS SECTION ── */
+    .products-section { padding: 52px 52px; background: var(--night); }
+    .section-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between; margin-bottom: 40px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 900;
+      font-style: italic;
+      color: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .product-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; color: rgba(240,232,220,0.35);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      header { padding: 0 20px; }
+      .page-hero-content { padding: 0 24px; }
+      .filter-bar { padding: 16px 24px; }
+      .products-section { padding: 32px 24px; }
+    }
+    @media (max-width: 560px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a href="index.html" class="logo">AMOUR ÉLIXE</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html" class="active">Products</a>
+    <a href="about.html">About Us</a>
+  </nav>
+  <div class="header-actions">
+    <button class="auth-btn" id="authBtn">Sign Up</button>
+    <button class="cart-btn" onclick="toggleCart()">
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ PAGE HERO ══ -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <p class="page-eyebrow">IXERIA · AMOUR ÉLIXE 2026</p>
+    <h1 class="page-title">
+      LES<br>
+      <em>ÉLIXES.</em>
+    </h1>
+    <p class="page-desc">There's a room where the light won't find you<br>Holding hands while the walls come tumbling down<br>When they do, I'll be right behind you</p>
+  </div>
+</div>
+
+
+
+<!-- ══ PRODUCTS ══ -->
+<section class="products-section" id="products">
+  <div class="section-header">
+    <h2 class="section-title">All Wines</h2>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+
+    <!-- 1 · Yellow Tail Cabernet Sauvignon -->
+    <div class="product-card" data-category="red">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A08,#2E1208);">
+        <img src="wine1.png" alt="Yellow Tail Cabernet Sauvignon" class="bottle-svg" width="350px">
+        <div class="product-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Red · Australia</p>
+        <h3 class="product-name">Yellow Tail Cabernet Sauvignon</h3>
+        <p class="product-desc">A bold red wine with dark fruit flavors and a firm texture. It is easy to drink and works with many kinds of food.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱543.56</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Yellow Tail Cabernet Sauvignon',543.56)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 · Yellow Tail Merlot -->
+    <div class="product-card" data-category="red">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A08,#2E1208);">
+        <img src="wine2.png" alt="Yellow Tail Merlot" class="bottle-svg" width="350px">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Red · Australia</p>
+        <h3 class="product-name">Yellow Tail Merlot​</h3>
+        <p class="product-desc">A smooth and medium‑bodied red wine with ripe fruit notes. It is a reliable choice for casual meals.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱599</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Yellow Tail Merlot',599)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · Santa Carolina Premio Red -->
+    <div class="product-card" data-category="red">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A08,#2E1208);">
+        <img src="wine3.png" alt="Yellow Tail Cabernet Sauvignon" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Red · Chile</p>
+        <h3 class="product-name">Santa Carolina Premio Red</h3>
+        <p class="product-desc">A light and fruity red wine from Chile that offers good value. It pairs well with grilled dishes.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱369</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Santa Carolina Premio Red',369)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · Jacob’s Creek Classic Cabernet Sauvignon -->
+    <div class="product-card" data-category="red">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A08,#2E1208);">
+        <img src="wine4.png" alt="Jacob’s Creek Classic Cabernet Sauvignon" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Red · Australia</p>
+        <h3 class="product-name">Jacob’s Creek Classic Cabernet Sauvignon</h3>
+        <p class="product-desc">A classic Australian Cabernet with a balanced taste. It has firm tannins and dark berry flavors.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱649</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Jacob’s Creek Classic Cabernet Sauvignon',649)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · Jacob’s Creek Shiraz & Cabernet -->
+    <div class="product-card" data-category="red">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A08,#2E1208);">
+        <img src="wine5.png" alt="Yellow Tail Cabernet Sauvignon" class="bottle-svg">
+        <div class="product-rating"><span class="star">★</span><span class="star">★<span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Red · Australia</p>
+        <h3 class="product-name">Jacob’s Creek Shiraz & Cabernet</h3>
+        <p class="product-desc">A blended red wine with spice and dark fruit notes. It shows more complexity than single‑varietal table wines.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱649</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Jacob’s Creek Shiraz & Cabernet',649)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 · Cloudy Bay Sauvignon Blanc -->
+    <div class="product-card" data-category="white">
+      <div class="product-image" style="background:linear-gradient(160deg,#0F1A14,#1E3020);">
+        <img src="wine6.png" alt="Cloudy Bay Sauvignon Blanc" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">White · New Zealand</p>
+        <h3 class="product-name">Cloudy Bay Sauvignon Blanc</h3>
+        <p class="product-desc">A crisp white wine with strong citrus and tropical fruit flavors. It feels fresh and lively on the palate.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱2,150</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Cloudy Bay Sauvignon Blanc',2,150)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 · Rothbury Estate Chardonnay -->
+    <div class="product-card" data-category="white">
+      <div class="product-image" style="background:linear-gradient(160deg,#0F1A14,#1E3020);">
+        <img src="wine7.png" alt="Rothbury Estate Chardonnay" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">White · Australia</p>
+        <h3 class="product-name">Rothbury Estate Chardonnay</h3>
+        <p class="product-desc">A white wine with soft fruit notes and a smooth mouthfeel. It is a good choice for richer dishes.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱875</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Rothbury Estate Chardonnay',875)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 · Matua Sauvignon Blanc Marlborough -->
+         <div class="product-card" data-category="White">
+      <div class="product-image" style="background:linear-gradient(160deg,#0F1A14,#1E3020);">
+        <img src="wine8.png" alt="Matua Sauvignon Blanc Marlborough " class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">White · New Zealand</p>
+        <h3 class="product-name">Matua Sauvignon Blanc Marlborough </h3>
+        <p class="product-desc">A bright and refreshing white wine with citrus and green fruit aromas. It is light and easy to enjoy.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱790</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Matua Sauvignon Blanc Marlborough ',790)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 · Brilla! Pinot Grigio Rosé -->
+    <div class="product-card" data-category="rosé">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A10,#2E1420);">
+        <img src="wine9.png" alt="Brilla! Pinot Grigio Rosé" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Rosé · Italy</p>
+        <h3 class="product-name">Brilla! Pinot Grigio Rosé</h3>
+        <p class="product-desc">A rosé with delicate fruit flavors and a light body. It is a pleasant wine for warm weather or light meals.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱499</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Brilla! Pinot Grigio Rosé',499)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 · Pluvium Rosé Premium Selection  -->
+    <div class="product-card" data-category="rosé">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A10,#2E1420);">
+        <img src="wine10.png" alt="Pluvium Rosé Premium Selection" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Rosé · Spain</p>
+        <h3 class="product-name">Pluvium Rosé Premium Selection</h3>
+        <p class="product-desc">A dry rosé with subtle berry notes and gentle acidity. It pairs well with salads and light dishes.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱475</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Pluvium Rosé Premium Selection',475)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+        <!-- 11· Chateau d’Esclans Whispering Angel Rosé -->
+    <div class="product-card" data-category="rosé">
+      <div class="product-image" style="background:linear-gradient(160deg,#180A10,#2E1420);">
+        <img src="wine11.png" alt="Chateau d’Esclans Whispering Angel Rosé" class="bottle-svg">
+        <div class="product-rating"><span class="star">★<span class="star">★<span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Rosé · France</p>
+        <h3 class="product-name">Chateau d’Esclans Whispering Angel Rosé</h3>
+        <p class="product-desc">A premium rosé with refined fruit flavors and a clean finish. It feels elegant and balanced.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱1,719</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Chateau d’Esclans Whispering Angel Rosé',1719)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+        <!-- 12 · Vino Isla Tropical Mango Wine -->
+    <div class="product-card" data-category="fruit">
+      <div class="product-image" style="background:linear-gradient(160deg,#0F1A14,#1E3020);">
+        <img src="wine12.png" alt="Vino Isla Tropical Mango Wine" class="bottle-svg">
+        <div class="product-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Fruit Wine · Philippines</p>
+        <h3 class="product-name">Vino Isla Tropical Mango Wine</h3>
+        <p class="product-desc">A fruit wine with sweet mango taste and a smooth finish. It is easy to sip and does not taste like traditional grape wine.</p>
+        <div class="product-footer">
+          <div><span class="product-price">₱999</span><span class="per-bottle">per bottle · 750ml</span></div>
+          <button class="add-btn" onclick="addToCart(this,'Vino Isla Tropical Mango Wine',999)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+</section>
+
+<!-- ══ AUTH MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="authModal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalForms">
+      <div class="modal-top">
+        <div class="modal-logo">AMOUR ÉLIXE</div>
+        <div class="modal-tabs">
+          <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+          <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log In</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-panel active" id="panelSignup">
+          <div class="modal-subtitle">Join the ÉLIXES</div>
+          <p class="modal-desc">Create your account to save favourites and track orders</p>
+          <div class="field-row">
+            <div class="field"><label>First Name</label><input type="text" id="su-first" placeholder="Jean"><div class="field-error" id="err-first">Required</div></div>
+            <div class="field"><label>Last Name</label><input type="text" id="su-last" placeholder="Dupont"><div class="field-error" id="err-last">Required</div></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@example.com"><div class="field-error" id="err-email">Enter a valid email</div></div>
+          <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Min. 8 characters"><div class="field-hint">At least 8 characters</div><div class="field-error" id="err-pass">Must be at least 8 characters</div></div>
+          <div class="field"><label>Country</label><select id="su-country"><option value="">Select…</option><option>Philippines</option><option>France</option><option>Italy</option><option>Spain</option><option>United States</option><option>United Kingdom</option><option>Australia</option><option>Other</option></select><div class="field-error" id="err-country">Please select a country</div></div>
+          <div class="age-check"><input type="checkbox" id="su-age"><label for="su-age">I confirm I am <span>18 years of age or older</span> and agree to the Terms of Service.</label></div>
+          <div class="field-error" id="err-age" style="margin-top:-10px;margin-bottom:12px;">You must confirm you are 18+</div>
+          <button class="modal-submit" onclick="submitSignup()">Create Account →</button>
+          <div class="modal-switch">Already a member? <button onclick="switchTab('login')">Log in here</button></div>
+        </div>
+        <div class="modal-panel" id="panelLogin">
+          <div class="modal-subtitle">Welcome back</div>
+          <p class="modal-desc">Sign in to continue shopping.</p>
+          <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="you@example.com"><div class="field-error" id="err-li-email">Enter a valid email</div></div>
+          <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="Your password"><div class="field-error" id="err-li-pass">Password is required</div></div>
+          <div style="text-align:right;margin:-8px 0 18px;"><button class="forgot-btn" onclick="showToast('Password reset link sent!')">Forgot password?</button></div>
+          <button class="modal-submit" onclick="submitLogin()">Log In →</button>
+          <div class="modal-switch">New to AMOUR ÉLIXE? <button onclick="switchTab('signup')">Create an account</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-title">Welcome to AMOUR ÉLIXE</div>
+      <p class="success-msg">Your account has been created, <span class="success-name" id="successName"></span>.<br>Start building your collection.</p>
+      <button class="modal-submit" onclick="closeModal()">Enter the Cart →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CART ══ -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Your Cart</span>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <p>Your cart is empty.</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="subtotal-label">Subtotal</span>
+      <span class="subtotal-value" id="cartTotal">₱0</span>
+    </div>
+    <p class="cart-note">Temperature-controlled shipping · Free on 6+ bottles<br>18+ only</p>
+    <button class="checkout-btn">Proceed to Checkout →</button>
+    <button class="continue-btn" onclick="toggleCart()">Continue Browsing</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
